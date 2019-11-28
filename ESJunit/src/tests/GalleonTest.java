@@ -20,6 +20,8 @@ class GalleonTest {
 	
 	private Galleon galleon;
 	private Galleon galleon2;
+	private Galleon galleon3;
+	private Galleon galleon4;
 	private List<IPosition> positionsE = new ArrayList<IPosition>();
 	private List<IPosition> positionsA = new ArrayList<IPosition>();
 
@@ -34,7 +36,11 @@ class GalleonTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		galleon= new Galleon(Compass.EAST,new Position(4,4));
-		galleon2 = new Galleon(Compass.EAST,new Position(5,5));
+		galleon2 = new Galleon(Compass.NORTH,new Position(5,5));
+		galleon3 = new Galleon(Compass.SOUTH,new Position(1,1));
+		galleon4 = new Galleon(Compass.WEST,new Position(3,7));
+		
+
 		positionsE.add(new Position(4,4));
 		positionsE.add(new Position(5,5));
 		positionsA.add(galleon.getPosition());
@@ -71,6 +77,9 @@ class GalleonTest {
 		Compass expected = Compass.EAST;
 		Compass actual = galleon.getBearing();
 		assertEquals(expected, actual);
+		assertEquals(Compass.NORTH,galleon2.getBearing());
+		assertEquals(Compass.SOUTH,galleon3.getBearing());
+		assertEquals(Compass.WEST,galleon4.getBearing());
 	}
 
 	@Test
