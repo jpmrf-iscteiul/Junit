@@ -2,28 +2,31 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import battleship.Galleon;
+import battleship.Caravel;
 import battleship.Compass;
+import battleship.Galleon;
 import battleship.IPosition;
 import battleship.Position;
 
 class GalleonTest {
 	
-	private Galleon galleon;
-	private Galleon galleon2;
-	private Galleon galleon3;
-	private Galleon galleon4;
-	private List<IPosition> positionsE = new ArrayList<IPosition>();
-	private List<IPosition> positionsA = new ArrayList<IPosition>();
+	private Compass compass_1;
+	private Compass compass_2;
+	private Compass compass_3;
+	private Compass compass_4;
+	private IPosition position_1;
+	private IPosition position_2;
+	private Galleon galleon_1;
+	private Galleon galleon_2;
+	private Galleon galleon_3;
+	private Galleon galleon_4;
+	private Caravel caravel;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -35,16 +38,17 @@ class GalleonTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		galleon= new Galleon(Compass.EAST,new Position(4,4));
-		galleon2 = new Galleon(Compass.NORTH,new Position(5,5));
-		galleon3 = new Galleon(Compass.SOUTH,new Position(1,1));
-		galleon4 = new Galleon(Compass.WEST,new Position(3,7));
-		
-
-		positionsE.add(new Position(4,4));
-		positionsE.add(new Position(5,5));
-		positionsA.add(galleon.getPosition());
-		positionsA.add(galleon2.getPosition());
+		position_1 = new Position(3, 4);
+		position_2 = new Position(4, 4);
+		caravel = new Caravel(Compass.NORTH, position_2);
+		compass_1 = Compass.NORTH;
+		compass_2 = Compass.SOUTH;
+		compass_3 = Compass.EAST;
+		compass_4 = Compass.WEST;
+		galleon_1 = new Galleon(compass_1, position_1);	
+		galleon_2 = new Galleon(compass_2, position_1);	
+		galleon_3 = new Galleon(compass_3, position_1);	
+		galleon_4 = new Galleon(compass_4, position_1);	
 	}
 
 	@AfterEach
@@ -52,106 +56,102 @@ class GalleonTest {
 	}
 
 	@Test
-	final void testGetSize() {
-		int expected = 5;
-		int actual = galleon.getSize();
-		assertEquals(expected,actual,"The Galleon.getSize() should be 5");
+	void testGetSize() {
+		assertEquals(5, galleon_1.getSize());
 	}
 
 	@Test
-	final void testGetCategory() {
-		String expected = "Galeao";
-		String actual = galleon.getCategory();
-		assertEquals(expected,actual,"The Galleon.getCategory() should be Galeao");
+	void testGetCategory() {
+		String test_1 = galleon_1.getCategory();
+		assertEquals(test_1,"Galeao");
+		String test_2 = galleon_1.getCategory();
+		assertNotEquals(test_2, "Sheep");
 	}
 
 	@Test
-	final void testGetPosition() {
-		Position expected = new Position(4,4);
-		Position actual = (Position) galleon.getPosition();
-		assertEquals(expected.toString(), actual.toString());
+	void testGetPosition() {
+		IPosition position = galleon_1.getPosition();
+		assertEquals(position, position_1);
 	}
 
 	@Test
-	final void testGetBearing() {
-		Compass expected = Compass.EAST;
-		Compass actual = galleon.getBearing();
-		assertEquals(expected, actual);
-		assertEquals(Compass.NORTH,galleon2.getBearing());
-		assertEquals(Compass.SOUTH,galleon3.getBearing());
-		assertEquals(Compass.WEST,galleon4.getBearing());
+	void testGetBearing() {
+		Compass compassAux_1 = galleon_1.getBearing();
+		assertEquals(compassAux_1, compass_1);
+		assertNotEquals(compassAux_1, compass_2);
+		assertNotEquals(compassAux_1, compass_3);
+		assertNotEquals(compassAux_1, compass_4);
+		Compass compassAux_2 = galleon_2.getBearing();
+		assertEquals(compassAux_2, compass_2);
+		Compass compassAux_3 = galleon_3.getBearing();
+		assertEquals(compassAux_3, compass_3);
+		Compass compassAux_4 = galleon_4.getBearing();
+		assertEquals(compassAux_4, compass_4);
 	}
 
 	@Test
-	final void testStillFloating() {
-	Boolean expected = true;
-	Boolean actual = galleon.stillFloating();
-	assertEquals(expected, actual);
+	void testStillFloating() {
+		Boolean trueTest = true;
+		Boolean falseTest = false;
+		Boolean floating = galleon_1.stillFloating();
+		assertEquals(trueTest, floating);
+		assertNotEquals(falseTest, floating);
 	}
 
 	@Test
-	final void testGetTopMostPos() {
-	 int expected = 4;
-	 int actual = galleon.getTopMostPos();
-	 assertEquals(expected, actual);
-}
-
-	@Test
-	final void testGetBottomMostPos() {
-	int expected = 6;
-	int actual = galleon.getBottomMostPos();
-	assertEquals(expected,actual);
+	void testGetTopMostPos() {
+		int pos = galleon_1.getTopMostPos();
+		assertEquals(pos, 3);
+		assertNotEquals(pos, 4);
 	}
 
 	@Test
-	final void testGetLeftMostPos() {
-	int expected = 2;
-	int actual = galleon.getLeftMostPos();
-	//HELPER
-	System.out.println(galleon.getBottomMostPos());
-	System.out.println(galleon.getRightMostPos());
-	System.out.println(galleon.getLeftMostPos());
-	System.out.println(galleon.getTopMostPos());
-	assertEquals(expected, actual);
+	void testGetBottomMostPos() {
+		int pos = galleon_1.getBottomMostPos();
+		assertEquals(pos, 5);
+		assertNotEquals(pos, 3);
 	}
 
 	@Test
-	final void testGetRightMostPos() {
-		int expected = 4;
-		int actual = galleon.getRightMostPos();
-		assertEquals(expected, actual);
+	void testGetLeftMostPos() {
+		int pos = galleon_1.getLeftMostPos();
+		assertEquals(pos, 4);
+		assertNotEquals(pos, 2);
 	}
 
 	@Test
-	final void testOccupies() {
-		Boolean expected = true;
-		Boolean actual = galleon.occupies(galleon.getPosition());
-		assertEquals(expected, actual);
-
+	void testGetRightMostPos() {
+		int pos = galleon_1.getRightMostPos();
+		assertEquals(pos, 6);
+		assertNotEquals(pos, 2);
 	}
 
 	@Test
-	final void testTooCloseTo() {
-		Boolean expected = true;
-		Boolean FALSE = false;
-		Boolean actual = galleon.tooCloseTo(galleon2);
-		assertEquals(expected, actual);
-		assertNotEquals(FALSE, actual);
+	void testOccupies() {
+		boolean occupies = true;
+		assertEquals(occupies, galleon_1.occupies(position_1));
 	}
 
 	@Test
-	final void testGetPositions() {
-		List<IPosition> expected = positionsE;
-		List<IPosition> actual = positionsA;
-		assertEquals(expected.toString(), actual.toString());
+	void testTooCloseTo() {
+		boolean close = galleon_1.tooCloseTo(caravel);
+		boolean TRUE = true;
+		boolean FALSE = false;
 		
+		assertEquals(TRUE, close);
+		assertNotEquals(FALSE, close);
 	}
 
 	@Test
-	final void testToString() {
-	String expected =  "[" + "Galeao" + " " + Compass.EAST + " " + new Position(4,4).toString() + "]";
-	String actual = galleon.toString();
-	assertEquals(expected, actual);
+	void testGetPositions() {
+		IPosition position = galleon_1.getPosition();
+		assertEquals(position, position_1);
+	}
+
+	@Test
+	void testToString() {
+		String content = galleon_1.toString();
+		assertEquals("[Galeao n Linha = 3 Coluna = 4]", content);
 	}
 
 }

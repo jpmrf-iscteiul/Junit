@@ -2,9 +2,6 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,15 +10,17 @@ import org.junit.jupiter.api.Test;
 
 import battleship.Caravel;
 import battleship.Compass;
+import battleship.Galleon;
 import battleship.IPosition;
 import battleship.Position;
 
 class CaravelTest {
 	
-	private Caravel caravel;
-	private Caravel caravel2;
-	private List<IPosition> positionsE = new ArrayList<IPosition>();
-	private List<IPosition> positionsA = new ArrayList<IPosition>();
+	private Compass compass_1;
+	private IPosition position_1;
+	private IPosition position_2;
+	private Caravel caravel_1;
+	private Galleon galleon;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -33,12 +32,11 @@ class CaravelTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		caravel= new Caravel(Compass.EAST,new Position(4,4));
-		caravel2 = new Caravel(Compass.EAST,new Position(5,5));
-		positionsE.add(new Position(4,4));
-		positionsE.add(new Position(5,5));
-		positionsA.add(caravel.getPosition());
-		positionsA.add(caravel2.getPosition());
+		position_1 = new Position(3, 4);
+		position_2 = new Position(4, 4);
+		galleon = new Galleon(Compass.NORTH, position_2);	
+		compass_1 = Compass.NORTH;
+		caravel_1 = new Caravel(compass_1, position_1);
 	}
 
 	@AfterEach
@@ -46,103 +44,91 @@ class CaravelTest {
 	}
 
 	@Test
-	final void testGetSize() {
-		int expected = 2;
-		int actual = caravel.getSize();
-		assertEquals(expected,actual,"The Caravel.getSize() should be 2");
+	void testGetSize() {
+		assertEquals(2, caravel_1.getSize());
 	}
 
 	@Test
-	final void testGetCategory() {
-		String expected = "Caravela";
-		String actual = caravel.getCategory();
-		assertEquals(expected,actual,"The Caravel.getCategory() should be Caravela");
+	void testGetCategory() {
+		String test_1 = caravel_1.getCategory();
+		assertEquals("Caravela",test_1);
+		String test_2 = caravel_1.getCategory();
+		assertNotEquals("Ola",test_2);
 	}
 
 	@Test
-	final void testGetPosition() {
-		Position expected = new Position(4,4);
-		Position actual = (Position) caravel.getPosition();
-		assertEquals(expected.toString(), actual.toString());
+	void testGetPosition() {
+		IPosition position = caravel_1.getPosition();
+		assertEquals(position_1,position);
 	}
 
 	@Test
-	final void testGetBearing() {
-		Compass expected = Compass.EAST;
-		Compass actual = caravel.getBearing();
-		assertEquals(expected, actual);
+	void testGetBearing() {
+		Compass compassAux_1 = caravel_1.getBearing();
+		assertEquals(compass_1,compassAux_1);
 	}
 
 	@Test
-	final void testStillFloating() {
-	Boolean expected = true;
-	Boolean actual = caravel.stillFloating();
-	assertEquals(expected, actual);
+	void testStillFloating() {
+		Boolean trueTest = true;
+		Boolean floating = caravel_1.stillFloating();
+		assertEquals(trueTest, floating);
 	}
 
 	@Test
-	final void testGetTopMostPos() {
-	 int expected = 4;
-	 int actual = caravel.getTopMostPos();
-	 assertEquals(expected, actual);
-}
-
-	@Test
-	final void testGetBottomMostPos() {
-	int expected = 4;
-	int actual = caravel.getBottomMostPos();
-	assertEquals(expected,actual);
+	void testGetTopMostPos() {
+		int pos = caravel_1.getTopMostPos();
+		assertEquals(3,pos);
+		assertNotEquals(4,pos);
 	}
 
 	@Test
-	final void testGetLeftMostPos() {
-	int expected = 4;
-	int actual = caravel.getLeftMostPos();
-	assertEquals(expected, actual);
-		//HELPER
-	System.out.println(caravel.getBottomMostPos());
-	System.out.println(caravel.getRightMostPos());
-	System.out.println(caravel.getLeftMostPos());
-	System.out.println(caravel.getTopMostPos());
+	void testGetBottomMostPos() {
+		int pos = caravel_1.getBottomMostPos();
+		assertEquals(4,pos);
+		assertNotEquals(3,pos);
 	}
 
 	@Test
-	final void testGetRightMostPos() {
-		int expected = 5;
-		int actual = caravel.getRightMostPos();
-		assertEquals(expected, actual);
+	void testGetLeftMostPos() {
+		int pos = caravel_1.getLeftMostPos();
+		assertEquals(4,pos);
+		assertNotEquals(2,pos);
 	}
 
 	@Test
-	final void testOccupies() {
-		Boolean expected = true;
-		Boolean actual = caravel.occupies(caravel.getPosition());
-		assertEquals(expected, actual);
-
+	void testGetRightMostPos() {
+		int pos = caravel_1.getRightMostPos();
+		assertEquals(4,pos);
+		assertNotEquals(2,pos);
 	}
 
 	@Test
-	final void testTooCloseTo() {
-		Boolean expected = true;
-		Boolean FALSE = false;
-		Boolean actual = caravel.tooCloseTo(caravel2);
-		assertEquals(expected, actual);
-		assertNotEquals(FALSE, actual);
+	void testOccupies() {
+		boolean occupies = true;
+		assertEquals(occupies, caravel_1.occupies(position_1));
 	}
 
 	@Test
-	final void testGetPositions() {
-		List<IPosition> expected = positionsE;
-		List<IPosition> actual = positionsA;
-		assertEquals(expected.toString(), actual.toString());
+	void testTooCloseTo() {
+		boolean close = caravel_1.tooCloseTo(galleon);
+		boolean TRUE = true;
+		boolean FALSE = false;
 		
+		assertEquals(TRUE, close);
+		assertNotEquals(FALSE, close);
 	}
 
 	@Test
-	final void testToString() {
-	String expected =  "[" + "Caravela" + " " + Compass.EAST + " " + new Position(4,4).toString() + "]";
-	String actual = caravel.toString();
-	assertEquals(expected, actual);
+	void testGetPositions() {
+		IPosition position = caravel_1.getPosition();
+		assertEquals(position_1,position);
+	}
+
+	@Test
+	void testToString() {
+		String content = caravel_1.toString();
+		assertEquals("[Caravela n Linha = 3 Coluna = 4]", content);
 	}
 
 }

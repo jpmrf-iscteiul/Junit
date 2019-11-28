@@ -36,6 +36,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		System.out.println("***  Battleship  ***");
+		System.out.println("nova");
+		System.out.println("batota");
 		try {
 			
 		}

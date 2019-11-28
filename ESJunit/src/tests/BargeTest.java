@@ -78,6 +78,9 @@ class BargeTest {
 	Boolean expected = true;
 	Boolean actual = barge.stillFloating();
 	assertEquals(expected, actual);
+	
+	barge.getPosition().isHit();
+	assertNotEquals(false,actual);
 	}
 
 	@Test
@@ -99,11 +102,6 @@ class BargeTest {
 	int expected = 4;
 	int actual = barge.getLeftMostPos();
 	assertEquals(expected, actual);
-		//HELPER
-	System.out.println(barge.getBottomMostPos());
-	System.out.println(barge.getRightMostPos());
-	System.out.println(barge.getLeftMostPos());
-	System.out.println(barge.getTopMostPos());
 	}
 
 	@Test

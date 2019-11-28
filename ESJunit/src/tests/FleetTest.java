@@ -1,38 +1,38 @@
 package tests;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import battleship.Carrack;
 import battleship.Compass;
-import battleship.Frigate;
+import battleship.Fleet;
 import battleship.Galleon;
 import battleship.IPosition;
 import battleship.IShip;
 import battleship.Position;
+import battleship.Ship;
 
 class FleetTest {
-	
-	private List<IShip> ships;
-	private List<IShip> ships1;
-	private Galleon galleon;
-	private Frigate	frigate;
-	private Frigate	frigate2;
-	private List<IShip> shipsLikeA = new ArrayList<IShip>();
-	private List<IShip> shipsLikeE = new ArrayList<IShip>();
-	private List<IShip> floatingShips = new ArrayList<IShip>();
-	private List<IShip> allShips = new ArrayList<IShip>();
 
+	private List<IShip> ships;
+	private Carrack carrack;
+	private IPosition position;
+	private IPosition positionGalleon;
+	private IPosition positionNula;
+	private Ship ship;
+	private Fleet fleet;
+	private Fleet fleet2;
+	private Galleon galleon;
+	
+	
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -45,76 +45,72 @@ class FleetTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		ships = new ArrayList<IShip>();
-		galleon = new Galleon(Compass.EAST,new Position(4,4));
-		frigate = new Frigate(Compass.EAST,new Position(3,3));
-		frigate2 = new Frigate(Compass.EAST,new Position(5,5));
-		ships.add(galleon);
-		ships.add(frigate);
-		ships.add(frigate2);
-		
-		
-	}
+		position = new Position(6, 7);
+		positionNula = new Position(30, 25);
+		positionGalleon = new Position(2,2);
+		carrack = new Carrack(Compass.NORTH,position);
+		fleet = new Fleet();
+		fleet2 = new Fleet();
+		fleet.addShip(carrack);
+		galleon = new Galleon(Compass.SOUTH, positionGalleon);
 
-	@AfterEach
-	void tearDown() throws Exception {
-	}
-	
-	
-
-@Test
-	final void testFleet() {
-		System.out.println("This test ran");
-		System.out.println(ships.size());
+		ships.add(carrack);
 	}
 
 	@Test
-	final void testAddShip() {
-	Boolean expected = true;
-	assertEquals(expected, ships.add(galleon));
-	
+	public void testFleet() {
+		ships = new ArrayList<IShip>();
+		position = new Position(6, 7);
+		carrack = new Carrack(Compass.NORTH,position);
 	}
 
 	@Test
-	final void testListShipsLike() {	
-		String category = "Fragata";
-		for (IShip s: ships) {
-			if (s.getCategory().equals(category)) 
-				shipsLikeE.add(s);
-			
-		}
-		shipsLikeA.add(frigate);
-		shipsLikeA.add(frigate2);
-		assertEquals(shipsLikeE, shipsLikeA);
+	public void testAddShip() {
+		ArrayList<IShip> lista = new ArrayList<IShip>();
+		lista.add(carrack);
+		assertEquals(lista,ships);
+		lista.add(carrack);
+		lista.add(carrack);
+		assertNotEquals(lista,ships);
 	}
 
 	@Test
-	final void testListFloatingShips() {
-		for (IShip s: ships) {
-			if (s.stillFloating()) {
-				floatingShips.add(s);
-			}
-		}
-		assertEquals(ships,floatingShips);
+	public void testListShipsLike() {
+		List<IShip> lista = fleet.listShipsLike(carrack.getCategory());
+		assertEquals(lista,ships);
+		List<IShip> lista1 = fleet.listShipsLike(galleon.getCategory());
+		assertNotEquals(lista1, ships);
 	}
 
 	@Test
-	final void testListAllShips() {
-		for (IShip s: ships) {
-			allShips.add(s);
-		}
-		assertEquals(ships, allShips);
+	public void testListFloatingShips() {
+		List<IShip> lista = fleet.listFloatingShips();
+		List<IShip> lista_1 = null;
+		assertEquals(lista, ships);
+		assertNotEquals(lista_1, ships);
 		
 	}
 
-//	@Ignore
-//	final void testShipAt() {
-//		String a = null;
-//		Position position = new Position(3,3);
-////		ships.get(i).occupies(position));
-//		
-//		System.out.println(a);
-//		
-//		
-//	}
+	@Test
+	public void testListAllShips() {
+		List<IShip> lista = fleet.listAllShips();
+		assertEquals(1,lista.size());
+		assertNotEquals(2,lista.size());
+		
+	}
+
+	@Test
+	public void testShipAt() {
+		IShip ship = fleet.shipAt(position);
+		IShip ship2 = fleet.shipAt(positionNula);
+		assertEquals(carrack, ship);
+    
+		Galleon g = new Galleon(Compass.NORTH, new Position(11,11));
+		IShip shipo = fleet.shipAt(new Position(11,11));
+		assertNotEquals(g, shipo);
+		
+	}
+	
+	
 
 }
