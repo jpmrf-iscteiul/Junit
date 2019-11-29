@@ -32,8 +32,8 @@ class CaravelTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		position_1 = new Position(3, 4);
-		position_2 = new Position(4, 4);
+		position_1 = new Position(4,5);
+		position_2 = new Position(5, 5);
 		galleon = new Galleon(Compass.NORTH, position_2);	
 		compass_1 = Compass.NORTH;
 		caravel_1 = new Caravel(compass_1, position_1);
@@ -46,26 +46,29 @@ class CaravelTest {
 	@Test
 	void testGetSize() {
 		assertEquals(2, caravel_1.getSize());
+		assertNotEquals(4, caravel_1.getSize());
 	}
 
 	@Test
 	void testGetCategory() {
 		String test_1 = caravel_1.getCategory();
-		assertEquals("Caravela",test_1);
+		assertEquals(test_1,"Caravela");
 		String test_2 = caravel_1.getCategory();
-		assertNotEquals("Ola",test_2);
+		assertNotEquals(test_2, "Ola");
 	}
 
 	@Test
 	void testGetPosition() {
 		IPosition position = caravel_1.getPosition();
-		assertEquals(position_1,position);
+		assertEquals(position, position_1);
+		assertNotEquals(new Position(9,9), position_1);
 	}
 
 	@Test
 	void testGetBearing() {
 		Compass compassAux_1 = caravel_1.getBearing();
-		assertEquals(compass_1,compassAux_1);
+		assertEquals(compassAux_1, compass_1);
+		assertNotEquals(new Position(9,9), compass_1);
 	}
 
 	@Test
@@ -73,40 +76,42 @@ class CaravelTest {
 		Boolean trueTest = true;
 		Boolean floating = caravel_1.stillFloating();
 		assertEquals(trueTest, floating);
+		assertNotEquals(false, floating);
 	}
 
 	@Test
 	void testGetTopMostPos() {
 		int pos = caravel_1.getTopMostPos();
-		assertEquals(3,pos);
-		assertNotEquals(4,pos);
+		assertEquals(pos, 3);
+		assertNotEquals(pos, 4);
 	}
 
 	@Test
 	void testGetBottomMostPos() {
 		int pos = caravel_1.getBottomMostPos();
-		assertEquals(4,pos);
-		assertNotEquals(3,pos);
+		assertEquals(pos, 4);
+		assertNotEquals(pos, 3);
 	}
 
 	@Test
 	void testGetLeftMostPos() {
 		int pos = caravel_1.getLeftMostPos();
-		assertEquals(4,pos);
-		assertNotEquals(2,pos);
+		assertEquals(pos, 4);
+		assertNotEquals(pos, 2);
 	}
 
 	@Test
 	void testGetRightMostPos() {
 		int pos = caravel_1.getRightMostPos();
-		assertEquals(4,pos);
-		assertNotEquals(2,pos);
+		assertEquals(pos, 4);
+		assertNotEquals(pos, 2);
 	}
 
 	@Test
 	void testOccupies() {
 		boolean occupies = true;
 		assertEquals(occupies, caravel_1.occupies(position_1));
+		assertNotEquals(false, caravel_1.occupies(position_1));
 	}
 
 	@Test
@@ -122,13 +127,15 @@ class CaravelTest {
 	@Test
 	void testGetPositions() {
 		IPosition position = caravel_1.getPosition();
-		assertEquals(position_1,position);
+		assertEquals(position, position_1);
+		assertNotEquals(new Position(9,9), position_1);
 	}
 
 	@Test
 	void testToString() {
 		String content = caravel_1.toString();
 		assertEquals("[Caravela n Linha = 3 Coluna = 4]", content);
+		assertNotEquals("[Caravela n Linha = 9 Coluna = 9]", content);
 	}
 
 }
